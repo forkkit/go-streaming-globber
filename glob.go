@@ -141,6 +141,9 @@ func stream(pattern string, results chan<- string, cancel <-chan struct{}) error
 
 	for d := range dirMatches {
 		if err := glob(d, file, results, cancel); err != nil {
+			// Drain channel before returning
+			for _ = range dirMatches {
+			}
 			return err
 		}
 	}
